@@ -54,8 +54,7 @@ public class GameFrame extends JFrame implements ActionListener {
             this.add(activeAddQuestPanel);
             this.revalidate();
         } else if (e.getSource() == printQuestionsMenuItem) {
-            // DataRepository.getInstance().printAll();
-            
+            DataRepository.getInstance().printAll();
         }
     }
 }

@@ -1,10 +1,13 @@
 package com.example;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -28,15 +31,22 @@ public class DataRepository {
                 System.out.println(" CONNECTION LOST");
             } else {
                 System.out.println("CONNECTION HERE");
+
                 stmt = connection.createStatement();
-                String sql = "CREATE TABLE COMPANY " +
-                "(ID INT PRIMARY KEY     NOT NULL," +
-                " NAME           TEXT    NOT NULL, " +
-                " AGE            INT     NOT NULL, " +
-                " ADDRESS        CHAR(50), " +
-                " SALARY         REAL)";
-                stmt.executeUpdate(sql);
-                stmt.close();
+                ResultSet resultSet = stmt.executeQuery("SELECT * FROM \"Questions\"");
+                while (resultSet.next()) {
+                    String text = resultSet.getString("Text");
+                    String[] answers = (String[])resultSet.getArray("Answers").getArray();
+                    Boolean[] answersBol = (Boolean[])resultSet.getArray("AnswersBol").getArray();
+                    HashMap<String, Boolean> map = new HashMap<>();
+                    for (int i = 0; i < answers.length; i++) {
+                        map.put(answers[i], answersBol[i]);
+                    }
+                    Question question = new Question(text, map);
+                    this.questions.add(question);
+                    System.out.println(question.toString());
+                }
+
                 connection.close();
             }
         } catch (SQLException e) {

@@ -95,7 +95,6 @@ public class ShowQuestionsPanel extends JPanel implements ActionListener {
         for (int i = 0; i < buttons.size(); i++) {
             if (i < numberOfAnswers) {
                 buttons.get(i).setText(answerChoices.get(i));
-                System.out.println(answerChoices.get(i));
             } else {
                 buttons.get(i).setVisible(false);
             }
