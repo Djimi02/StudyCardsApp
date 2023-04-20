@@ -3,12 +3,14 @@ package com.example;
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class DataRepository {
@@ -47,6 +49,7 @@ public class DataRepository {
                     System.out.println(question.toString());
                 }
 
+                stmt.close();
                 connection.close();
             }
         } catch (SQLException e) {
@@ -64,6 +67,30 @@ public class DataRepository {
 
     public void addQuestion(Question question) {
         this.questions.add(question);
+
+        try {
+            this.connection = DriverManager.getConnection("jdbc:postgresql:StudyCardsDB", "postgres", "mitkopostgres");
+
+            if (connection == null) {
+                System.out.println(" CONNECTION LOST");
+            } else {
+                System.out.println("CONNECTION HERE");
+
+                String sql = "INSERT INTO \"Questions\" (\"Text\",\"Answers\",\"AnswersBol\") VALUES (?,?,?)";
+                PreparedStatement stmt1 = connection.prepareStatement(sql);
+                Array answers = connection.createArrayOf("text", question.getAnswers().keySet().toArray());
+                Array answersBol = connection.createArrayOf("boolean", question.getAnswers().values().toArray());
+                stmt1.setString(1, question.getText());
+                stmt1.setArray(2, answers);
+                stmt1.setArray(3, answersBol);
+                stmt1.executeUpdate();
+
+                stmt1.close();
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void printAll() {
