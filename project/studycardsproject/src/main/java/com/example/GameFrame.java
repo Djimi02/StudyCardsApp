@@ -11,13 +11,12 @@ import javax.swing.JMenuItem;
 public class GameFrame extends JFrame implements ActionListener {
 
     private final int FRAME_WIDTH = 600;
-    private final int FRAME_HEIGHT = 600;
+    private final int FRAME_HEIGHT = 300;
 
     private JMenuBar menuBar = new JMenuBar();
     private JMenu optionsMenu = new JMenu("Options");
-    private JMenuItem showQuestionsMenuItem = new JMenuItem("Show questions");
-    private JMenuItem addQuestionsMenuItem = new JMenuItem("Add questions");
-    private JMenuItem printQuestionsMenuItem = new JMenuItem("Print questions");
+    private JMenuItem showQuestionsMenuItem = new JMenuItem("Show cards");
+    private JMenuItem addQuestionsMenuItem = new JMenuItem("Add card");
 
     private AddQuestionsPanel activeAddQuestPanel;
     private ShowQuestionsPanel activeShowQuestionsPanel;
@@ -25,10 +24,8 @@ public class GameFrame extends JFrame implements ActionListener {
     public GameFrame() {
         showQuestionsMenuItem.addActionListener(this);
         addQuestionsMenuItem.addActionListener(this);
-        printQuestionsMenuItem.addActionListener(this);
         optionsMenu.add(showQuestionsMenuItem);
         optionsMenu.add(addQuestionsMenuItem);
-        optionsMenu.add(printQuestionsMenuItem);
         menuBar.add(optionsMenu);
         this.setJMenuBar(menuBar);
 
@@ -53,8 +50,6 @@ public class GameFrame extends JFrame implements ActionListener {
             this.getContentPane().removeAll();
             this.add(activeAddQuestPanel);
             this.revalidate();
-        } else if (e.getSource() == printQuestionsMenuItem) {
-            DataRepository.getInstance().printAll();
         }
     }
 }

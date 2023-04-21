@@ -16,10 +16,9 @@ import javax.swing.SpringLayout;
 public class AddQuestionsPanel extends JPanel implements ActionListener {
 
     private final int PANEL_WIDTH = 600;
-    private final int PANEL_HEIGHT = 600;
+    private final int PANEL_HEIGHT = 300;
 
     private final SpringLayout layout = new SpringLayout();
-    private final GameFrame parentFrame;
 
     private final DataRepository dataRepository;
 
@@ -37,7 +36,6 @@ public class AddQuestionsPanel extends JPanel implements ActionListener {
     private JButton addQuestionBTN = new JButton("Add question");
     
     public AddQuestionsPanel(GameFrame parentFrame) {
-        this.parentFrame = parentFrame;
         this.dataRepository = DataRepository.getInstance();
 
         this.addQuestionBTN.addActionListener(this);

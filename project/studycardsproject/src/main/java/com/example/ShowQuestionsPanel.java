@@ -14,14 +14,12 @@ import javax.swing.SpringLayout;
 public class ShowQuestionsPanel extends JPanel implements ActionListener {
 
     private final int PANEL_WIDTH = 600;
-    private final int PANEL_HEIGHT = 600;
+    private final int PANEL_HEIGHT = 300;
 
-    private final GameFrame parentFrame;
     private final SpringLayout layout = new SpringLayout();
 
     private Question activeQuestion;
 
-    // private String[] answerChoices = new String[4];
     private List<String> answerChoices = new ArrayList<>();
 
     /* GUI */
@@ -34,12 +32,10 @@ public class ShowQuestionsPanel extends JPanel implements ActionListener {
             add(new JButton("answer4"));
         }
     };
-    // private JButton[] buttons = new JButton[] 
-    //     {new JButton("answer1"), new JButton("answer2"), new JButton("answer3"), new JButton("answer4")};
-    private JButton nextQuestionBTN = new JButton("Next Question");
+    private JButton nextQuestionBTN = new JButton("Next Card");
+    private JButton deleteQuestionBTN = new JButton("Delete Card");
     
     public ShowQuestionsPanel(GameFrame parentFrame) {
-        this.parentFrame = parentFrame;
         this.setLayout(layout);
 
         this.add(questionTextJL);
@@ -49,6 +45,9 @@ public class ShowQuestionsPanel extends JPanel implements ActionListener {
         }
         this.add(nextQuestionBTN);
         nextQuestionBTN.addActionListener(this);
+        this.add(deleteQuestionBTN);
+        deleteQuestionBTN.addActionListener(this);
+        deleteQuestionBTN.setBackground(Color.red);
 
         // First row constraints
         layout.putConstraint(SpringLayout.NORTH, questionTextJL, 10, SpringLayout.NORTH, parentFrame.getContentPane());
@@ -70,6 +69,10 @@ public class ShowQuestionsPanel extends JPanel implements ActionListener {
         // Third row constraints
         layout.putConstraint(SpringLayout.NORTH, nextQuestionBTN, 15, SpringLayout.SOUTH, buttons.get(3));
         layout.putConstraint(SpringLayout.WEST, nextQuestionBTN, 250, SpringLayout.WEST, parentFrame.getContentPane());
+
+        // Fourth row constraints
+        layout.putConstraint(SpringLayout.NORTH, deleteQuestionBTN, 15, SpringLayout.SOUTH, nextQuestionBTN);
+        layout.putConstraint(SpringLayout.WEST, deleteQuestionBTN, 250, SpringLayout.WEST, parentFrame.getContentPane());
 
         this.setSize(PANEL_WIDTH, PANEL_HEIGHT);
         this.requestFocus();
@@ -111,6 +114,16 @@ public class ShowQuestionsPanel extends JPanel implements ActionListener {
             return;
         }
 
+        if (e.getSource() == deleteQuestionBTN) {
+            DataRepository.getInstance().deleteQuestion(activeQuestion);
+
+            cleanPanel();
+
+            loadQuestion(DataRepository.getInstance().getRandomQuestion());
+
+            return;
+        }
+
         for (JButton button : buttons) {
             button.setEnabled(false);
 
@@ -133,6 +146,8 @@ public class ShowQuestionsPanel extends JPanel implements ActionListener {
             button.setEnabled(true);
             button.setVisible(true);
             answerChoices.clear();
+            button.setText("");
         }
+        questionTextJL.setText("<Question here>");
     }
 }
